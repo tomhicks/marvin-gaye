@@ -1,31 +1,38 @@
 const inspect = require("./inspect")
 
-function marvin(/* options */) {
-  return function(object) {
-    const proxy = Object.create(object)
+function marvin(object, {log, objectName} = {}) {
+  const proxy = Object.create(object)
 
-    proxy.__marvin = []
-    proxy.__marvinInspect = inspect(proxy)
+  proxy.__marvin = []
+  proxy.__marvinInspect = inspect(proxy)
 
-    for (const name in object) {
-      if (typeof object[name] === "function") {
-        proxy[name] = function(...args) {
-          const returnValue = object[name].apply(this, args)
+  for (const name in object) {
+    if (typeof object[name] === "function") {
+      proxy[name] = function(...args) {
+        const returnValue = object[name].apply(this, args)
 
-          const call = {args, returnValue}
-          proxy[name].__marvin.push(call)
-          proxy.__marvin.push({name, call})
+        const functionCall = {args, returnValue}
+        proxy[name].__marvin.push(functionCall)
 
-          return returnValue
-        }
+        const methodCall = {name, call: functionCall}
+        proxy.__marvin.push(methodCall)
 
-        proxy[name].__marvin = []
-        proxy[name].__marvinInspect = inspect(proxy[name])
+        log && log(
+          objectName,
+          methodCall,
+          proxy[name].__marvin.slice(),
+          proxy.__marvin.slice()
+        )
+
+        return returnValue
       }
-    }
 
-    return proxy
+      proxy[name].__marvin = []
+      proxy[name].__marvinInspect = inspect(proxy[name])
+    }
   }
+
+  return proxy
 }
 
 module.exports = marvin

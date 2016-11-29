@@ -1,10 +1,10 @@
 const {expect} = require("chai")
-const marvin = require("../")
+const whatsGoingOn = require("../")
 
 const inspect = require("../inspect")
 
 describe("Inspecting scribed objects", function() {
-  const math = marvin()({
+  const math = whatsGoingOn({
     add(a, b) {
       return a + b
     },
@@ -58,7 +58,7 @@ describe("Inspecting scribed objects", function() {
 })
 
 describe("Using the inspection directly on the scribed object", () => {
-  const english = marvin()({
+  const english = whatsGoingOn({
     greet(a) {
       return "Hello " + a
     },
