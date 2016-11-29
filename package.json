@@ -1,0 +1,30 @@
+{
+  "name": "marvin-gaye",
+  "version": "1.0.0",
+  "description": "Find out What's Going On with your objects",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "npm run test && npm run lint && npm run build",
+    "build": "rm -rf lib && babel src -d lib",
+    "test": "mocha src",
+    "lint": "eslint src"
+  },
+  "keywords": [
+    "log",
+    "aspect",
+    "method",
+    "logging"
+  ],
+  "author": "Tom Hicks",
+  "license": "ISC",
+  "devDependencies": {
+    "@mft/eslint-config-momentumft": "^2.1.1",
+    "ava": "^0.17.0",
+    "babel-cli": "^6.18.0",
+    "babel-preset-latest": "^6.16.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.11.1",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.6"
+  }
+}
