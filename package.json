@@ -16,7 +16,7 @@
     "logging"
   ],
   "author": "Tom Hicks",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@mft/eslint-config-momentumft": "^2.1.1",
     "ava": "^0.17.0",
