@@ -6,15 +6,15 @@
 
 ## Quick start
 
-```
-npm install marvin-gaye
-```
+`npm install marvin-gaye`
 
 ```javascript
 import whatsGoingOn from "marvin-gaye"
 
 const myObject = {
-  method1() {},
+  shouted(s) {
+    return s.toUpperCase() + "!"
+  },
 }
 
 const instrumentedObject = whatsGoingOn(myObject, {
@@ -24,7 +24,8 @@ const instrumentedObject = whatsGoingOn(myObject, {
   }
 })
 
-instrumentedObject.method1() // method1 called on myObject
+const shouty = instrumentedObject.shouted("hello") // HELLO!
+// DEBUG: shouted called on myObject
 ```
 
 
