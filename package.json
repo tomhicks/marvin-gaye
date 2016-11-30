@@ -15,6 +15,10 @@
     "method",
     "logging"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomhicks/marvin-gaye"
+  },
   "author": "Tom Hicks",
   "license": "MIT",
   "devDependencies": {
