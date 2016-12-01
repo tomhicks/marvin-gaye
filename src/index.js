@@ -1,3 +1,5 @@
+"use strict"
+
 const inspect = require("./inspect")
 
 function marvin(object, {log, objectName} = {}) {
@@ -7,7 +9,7 @@ function marvin(object, {log, objectName} = {}) {
   proxy.__marvinInspect = inspect(proxy)
 
   for (const name in object) {
-    if (typeof object[name] === "function") {
+    if (typeof object[name] === "function" && Object.getOwnPropertyDescriptor(object, name).writable) {
       proxy[name] = function(...args) {
         const returnValue = object[name].apply(this, args)
 

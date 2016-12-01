@@ -51,6 +51,11 @@ describe("marvin", function() {
       sinon.assert.calledWith(obj.method, 1, 2, 3)
       expect(result).to.equal(5)
     })
+
+    it("should skip unwritable properties", () => {
+      const obj = Object.freeze({a() {}})
+      expect(() => whatsGoingOn(obj)).to.not.throw()
+    })
   })
 
   describe("when a logging function is passed", () => {
