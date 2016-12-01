@@ -5,6 +5,8 @@ const sinon = require("sinon")
 
 const marvin = require("../")
 
+const curry = require("curry")
+
 const modes = [
   {name: "delegation mode", fn: marvin},
   {name: "mutative mode", fn: marvin.mutative},
@@ -63,6 +65,19 @@ modes.map(({name: mode, fn: whatsGoingOn}) => {
 
         sinon.assert.calledWith(loggedObject.method, 1, 2, 3)
         expect(result).to.equal(5)
+      })
+
+      it("should work with curried functions", () => {
+        const source = {
+          curried(a, b) {
+            return a + b
+          },
+        }
+
+        const proxy = whatsGoingOn(source)
+        const curriedAfterWrapping = curry(proxy.curried)
+
+        expect(curriedAfterWrapping(1)(2)).to.equal(3)
       })
 
       it("should skip unwritable properties", () => {
