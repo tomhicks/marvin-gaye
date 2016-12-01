@@ -80,6 +80,16 @@ modes.map(({name: mode, fn: whatsGoingOn}) => {
         expect(curriedAfterWrapping(1)(2)).to.equal(3)
       })
 
+      it("should maintain the name", () => {
+        const proxy = whatsGoingOn({
+          myFunctionName(a, b) {
+            return a + b
+          },
+        })
+
+        expect(proxy.myFunctionName.name).to.equal("myFunctionName")
+      })
+
       it("should skip unwritable properties", () => {
         const obj = Object.freeze({a() {}})
         expect(() => whatsGoingOn(obj)).to.not.throw()

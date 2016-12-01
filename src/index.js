@@ -37,6 +37,7 @@ function marvin(object, {log, objectName, mode = DISTANT_LOVER} = {}) {
       }
 
       Object.defineProperty(proxy[name], "length", {value: originalFunction.length})
+      Object.defineProperty(proxy[name], "name", {value: originalFunction.name})
 
       proxy[name].__marvin = []
       proxy[name].__marvinInspect = inspect(proxy[name])
