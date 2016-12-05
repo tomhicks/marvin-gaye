@@ -101,12 +101,16 @@ modes.map(({name: mode, fn: whatsGoingOn}) => {
 
       beforeEach(() => {
         logSpy = sinon.spy()
+        const clock = sinon.useFakeTimers()
         const loggedObject = whatsGoingOn({
           jamie() {
+            clock.tick(50)
             return 5
           },
 
-          another() {},
+          another() {
+            clock.tick(50)
+          },
         }, {log: logSpy})
 
         loggedObject.jamie(1, 2, 3)
@@ -120,43 +124,43 @@ modes.map(({name: mode, fn: whatsGoingOn}) => {
 
       it("should call the logging function with name, arguments and returnValue", () => {
         expect(logSpy.firstCall.args[1]).to.eql({
-          name: "jamie", call: {args: [1, 2, 3], returnValue: 5},
+          name: "jamie", call: {args: [1, 2, 3], returnValue: 5, time: 50},
         })
 
         expect(logSpy.secondCall.args[1]).to.eql({
-          name: "another", call: {args: [], returnValue: undefined},
+          name: "another", call: {args: [], returnValue: undefined, time: 50},
         })
 
         expect(logSpy.thirdCall.args[1]).to.eql({
-          name: "jamie", call: {args: [4, 5, 6], returnValue: 5},
+          name: "jamie", call: {args: [4, 5, 6], returnValue: 5, time: 50},
         })
       })
 
       it("should include the list of calls to that method as the third parameter", () => {
         expect(logSpy.firstCall.args[2]).to.eql([
-          {args: [1, 2, 3], returnValue: 5},
+          {args: [1, 2, 3], returnValue: 5, time: 50},
         ])
 
         expect(logSpy.thirdCall.args[2]).to.eql([
-          {args: [1, 2, 3], returnValue: 5},
-          {args: [4, 5, 6], returnValue: 5},
+          {args: [1, 2, 3], returnValue: 5, time: 50},
+          {args: [4, 5, 6], returnValue: 5, time: 50},
         ])
       })
 
       it("should include the list of calls to all methods as the fourth parameter", () => {
         expect(logSpy.firstCall.args[3]).to.eql([
-          {name: "jamie", call: {args: [1, 2, 3], returnValue: 5}},
+          {name: "jamie", call: {args: [1, 2, 3], returnValue: 5, time: 50}},
         ])
 
         expect(logSpy.secondCall.args[3]).to.eql([
-          {name: "jamie", call: {args: [1, 2, 3], returnValue: 5}},
-          {name: "another", call: {args: [], returnValue: undefined}},
+          {name: "jamie", call: {args: [1, 2, 3], returnValue: 5, time: 50}},
+          {name: "another", call: {args: [], returnValue: undefined, time: 50}},
         ])
 
         expect(logSpy.thirdCall.args[3]).to.eql([
-          {name: "jamie", call: {args: [1, 2, 3], returnValue: 5}},
-          {name: "another", call: {args: [], returnValue: undefined}},
-          {name: "jamie", call: {args: [4, 5, 6], returnValue: 5}},
+          {name: "jamie", call: {args: [1, 2, 3], returnValue: 5, time: 50}},
+          {name: "another", call: {args: [], returnValue: undefined, time: 50}},
+          {name: "jamie", call: {args: [4, 5, 6], returnValue: 5, time: 50}},
         ])
       })
     })

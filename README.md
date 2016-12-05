@@ -91,6 +91,7 @@ Details about a call to a particular function
 {
   args: Array(Maybe(Any)), // the arguments that the function was called with
   returnValue: Maybe(Any), // the return value of the function
+  time: Number, // the number of ms taken to execute the function
 }
 ```
 
@@ -176,7 +177,8 @@ const tom = whatsGoingOn(person, {
       "of method", methodCall.name,
       "on object", objectName,
       "was called with args", methodCall.call.args,
-      "and returned", methodCall.call.returnValue
+      "and returned", methodCall.call.returnValue,
+      "in", methodCall.call.time, "ms"
     )
 
     console.debug(

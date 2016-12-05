@@ -1,22 +1,35 @@
 const {expect} = require("chai")
+const sinon = require("sinon")
+
 const whatsGoingOn = require("../")
 
 const inspect = require("../inspect")
 
 describe("Inspecting scribed objects", function() {
-  const math = whatsGoingOn({
-    add(a, b) {
-      return a + b
-    },
+  let clock, math
 
-    multiply(a, b) {
-      return a * b
-    },
+  before(() => {
+    clock = sinon.useFakeTimers()
+    math = whatsGoingOn({
+      add(a, b) {
+        clock.tick(50)
+        return a + b
+      },
+
+      multiply(a, b) {
+        clock.tick(50)
+        return a * b
+      },
+    })
+
+    math.add(2, 3)
+    math.multiply(4, 5)
+    math.add(6, 7)
   })
 
-  math.add(2, 3)
-  math.multiply(4, 5)
-  math.add(6, 7)
+  after(() => {
+    clock.restore()
+  })
 
   describe("lastCall", () => {
     it("should return details of the last call to an object", () => {
@@ -25,6 +38,7 @@ describe("Inspecting scribed objects", function() {
         call: {
           args: [6, 7],
           returnValue: 13,
+          time: 50,
         },
       })
     })
@@ -33,6 +47,7 @@ describe("Inspecting scribed objects", function() {
       expect(inspect(math.multiply).lastCall()).to.eql({
         args: [4, 5],
         returnValue: 20,
+        time: 50,
       })
     })
 

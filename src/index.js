@@ -7,6 +7,7 @@ const AINT_NOTHIN_LIKE_THE_REAL_THING = "mutate"
 
 function marvin(object, {log, objectName, mode = DISTANT_LOVER} = {}) {
   if (Object.isFrozen(object)) return object
+  const timer = typeof performance === "object" ? performance : Date
 
   const proxy = mode === DISTANT_LOVER ? Object.create(object) : object
 
@@ -18,9 +19,11 @@ function marvin(object, {log, objectName, mode = DISTANT_LOVER} = {}) {
       const originalFunction = object[name]
 
       proxy[name] = function(...args) {
+        const startTime = timer.now()
         const returnValue = originalFunction.apply(this, args)
+        const endTime = timer.now()
 
-        const functionCall = {args, returnValue}
+        const functionCall = {args, returnValue, time: endTime - startTime}
         proxy[name].__marvin.push(functionCall)
 
         const methodCall = {name, call: functionCall}
