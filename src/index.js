@@ -1,7 +1,5 @@
 "use strict"
 
-const inspect = require("./inspect")
-
 const DISTANT_LOVER = "proto"
 const AINT_NOTHIN_LIKE_THE_REAL_THING = "mutate"
 
@@ -12,7 +10,6 @@ function marvin(object, {log, objectName, mode = DISTANT_LOVER} = {}) {
   const proxy = mode === DISTANT_LOVER ? Object.create(object) : object
 
   proxy.__marvin = []
-  proxy.__marvinInspect = inspect(proxy)
 
   for (const name in object) {
     if (typeof object[name] === "function" && Object.getOwnPropertyDescriptor(object, name).writable) {
@@ -43,7 +40,6 @@ function marvin(object, {log, objectName, mode = DISTANT_LOVER} = {}) {
       Object.defineProperty(proxy[name], "name", {value: originalFunction.name})
 
       proxy[name].__marvin = []
-      proxy[name].__marvinInspect = inspect(proxy[name])
     }
   }
 
