@@ -1,6 +1,6 @@
 {
   "name": "marvin-gaye",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Find out What's Going On with your objects",
   "main": "index.js",
   "scripts": {
