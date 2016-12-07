@@ -16,15 +16,18 @@ function marvin(object, {log, objectName, mode = DISTANT_LOVER} = {}) {
       const originalFunction = object[name]
 
       proxy[name] = function(...args) {
+        const functionCall = {args}
+
+        proxy[name].__marvin.push(functionCall)
+        const methodCall = {name, call: functionCall}
+        proxy.__marvin.push(methodCall)
+
         const startTime = timer.now()
         const returnValue = originalFunction.apply(this, args)
         const endTime = timer.now()
 
-        const functionCall = {args, returnValue, time: endTime - startTime}
-        proxy[name].__marvin.push(functionCall)
-
-        const methodCall = {name, call: functionCall}
-        proxy.__marvin.push(methodCall)
+        functionCall.returnValue = returnValue
+        functionCall.time = endTime - startTime
 
         log && log(
           objectName,

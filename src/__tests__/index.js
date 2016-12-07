@@ -186,6 +186,32 @@ modes.map(({name: mode, fn: whatsGoingOn}) => {
         expect(logSpy.firstCall.args[0]).to.eql("myObject")
       })
     })
+
+    describe("when an object makes calls to itself", () => {
+      const obj = {
+        methodA() {
+          return this.methodB() * 2
+        },
+
+        methodB() {
+          return 5
+        },
+      }
+
+      const loggedObject = whatsGoingOn(obj)
+      const result = loggedObject.methodA()
+
+      it("should record the function calls in call, not return order", () => {
+        expect(result).to.equal(10)
+        expect(loggedObject.__marvin[0]).to.have.property("name", "methodA")
+        expect(loggedObject.__marvin[0]).to.have.property("call")
+          .that.has.property("returnValue", 10)
+
+        expect(loggedObject.__marvin[1]).to.have.property("name", "methodB")
+        expect(loggedObject.__marvin[1]).to.have.property("call")
+          .that.has.property("returnValue", 5)
+      })
+    })
   })
 })
 
